@@ -119,7 +119,7 @@ namespace Automatonymous.Activities
         where TInstance : class
     {
         readonly Dictionary<Type, List<ExceptionActivity<TInstance, TData>>> _exceptionHandlers;
-        Behavior<TInstance> _behavior;
+        readonly Behavior<TInstance> _behavior;
 
         public TryActivity(Event @event, IEnumerable<EventActivity<TInstance>> activities,
             IEnumerable<ExceptionActivity<TInstance, TData>> exceptionBinder)
