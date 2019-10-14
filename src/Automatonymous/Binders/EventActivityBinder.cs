@@ -43,6 +43,37 @@ namespace Automatonymous.Binders
         /// <returns></returns>
         EventActivityBinder<TInstance> If(StateMachineCondition<TInstance> condition,
             Func<EventActivityBinder<TInstance>, EventActivityBinder<TInstance>> activityCallback);
+
+        /// <summary>
+        /// Create a conditional branch of activities for processing
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="activityCallback"></param>
+        /// <returns></returns>
+        EventActivityBinder<TInstance> IfAsync(StateMachineAsyncCondition<TInstance> condition,
+            Func<EventActivityBinder<TInstance>, EventActivityBinder<TInstance>> activityCallback);
+
+        /// <summary>
+        /// Create a conditional branch of activities for processing
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="thenActivityCallback"></param>
+        /// <param name="elseActivityCallback"></param>
+        /// <returns></returns>
+        EventActivityBinder<TInstance> IfElse(StateMachineCondition<TInstance> condition,
+            Func<EventActivityBinder<TInstance>, EventActivityBinder<TInstance>> thenActivityCallback,
+            Func<EventActivityBinder<TInstance>, EventActivityBinder<TInstance>> elseActivityCallback);
+
+        /// <summary>
+        /// Create a conditional branch of activities for processing
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="thenActivityCallback"></param>
+        /// <param name="elseActivityCallback"></param>
+        /// <returns></returns>
+        EventActivityBinder<TInstance> IfElseAsync(StateMachineAsyncCondition<TInstance> condition,
+            Func<EventActivityBinder<TInstance>, EventActivityBinder<TInstance>> thenActivityCallback,
+            Func<EventActivityBinder<TInstance>, EventActivityBinder<TInstance>> elseActivityCallback);
     }
 
 
@@ -76,5 +107,36 @@ namespace Automatonymous.Binders
         /// <returns></returns>
         EventActivityBinder<TInstance, TData> If(StateMachineCondition<TInstance, TData> condition,
             Func<EventActivityBinder<TInstance, TData>, EventActivityBinder<TInstance, TData>> activityCallback);
+
+        /// <summary>
+        /// Create a conditional branch of activities for processing
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="activityCallback"></param>
+        /// <returns></returns>
+        EventActivityBinder<TInstance, TData> IfAsync(StateMachineAsyncCondition<TInstance, TData> condition,
+            Func<EventActivityBinder<TInstance, TData>, EventActivityBinder<TInstance, TData>> activityCallback);
+
+        /// <summary>
+        /// Create a conditional branch of activities for processing
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="thenActivityCallback"></param>
+        /// <param name="elseActivityCallback"></param>
+        /// <returns></returns>
+        EventActivityBinder<TInstance, TData> IfElse(StateMachineCondition<TInstance, TData> condition,
+            Func<EventActivityBinder<TInstance, TData>, EventActivityBinder<TInstance, TData>> thenActivityCallback,
+            Func<EventActivityBinder<TInstance, TData>, EventActivityBinder<TInstance, TData>> elseActivityCallback);
+
+        /// <summary>
+        /// Create a conditional branch of activities for processing
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="thenActivityCallback"></param>
+        /// <param name="elseActivityCallback"></param>
+        /// <returns></returns>
+        EventActivityBinder<TInstance, TData> IfElseAsync(StateMachineAsyncCondition<TInstance, TData> condition,
+            Func<EventActivityBinder<TInstance, TData>, EventActivityBinder<TInstance, TData>> thenActivityCallback,
+            Func<EventActivityBinder<TInstance, TData>, EventActivityBinder<TInstance, TData>> elseActivityCallback);
     }
 }

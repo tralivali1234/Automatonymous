@@ -1,24 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
+
   <PropertyGroup>
-    <PackageId>Automatonymous.Visualizer</PackageId>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Automatonymous.Visualizer.xml</DocumentationFile>
-    <Description>Automatonymous, an open source state machine library, usable with MassTransit</Description>
-    <Version>3.5.11</Version>
-    <PackageProjectUrl>https://github.com/MassTransit/Automatonymous</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/MassTransit/Automatonymous/blob/master/LICENSE</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/MassTransit/Automatonymous</RepositoryUrl>
-    <PackageTags>MassTransit</PackageTags>
-    <Authors>Chris Patterson</Authors>
+    <Description>$(Description)</Description>
+    <PackageTags>MassTransit;Automatonymous;Visualizer</PackageTags>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="GreenPipes" Version="2.1.0" />
-    <PackageReference Include="QuickGraph" Version="3.6.61119.7" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
     <ProjectReference Include="..\Automatonymous\Automatonymous.csproj" />
   </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+    <PackageReference Include="QuickGraph" Version="3.6.61119.7"/>
+    <Reference Include="System"/>
+    <Reference Include="System.Core"/>
+    <Reference Include="System.Drawing"/>
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="QuickGraph.NETStandard" Version="3.8.0"/>
+  </ItemGroup>
+
+
 </Project>

@@ -20,39 +20,47 @@ namespace Automatonymous.Activities
         Activity<TInstance>
         where TInstance : class
     {
-        readonly Behavior<TInstance> _behavior;
-        readonly StateMachineCondition<TInstance> _condition;
+        readonly Behavior<TInstance> _thenBehavior;
+        readonly Behavior<TInstance> _elseBehavior;
+        readonly StateMachineAsyncCondition<TInstance> _condition;
 
-        public ConditionActivity(StateMachineCondition<TInstance> condition, Behavior<TInstance> behavior)
+        public ConditionActivity(StateMachineAsyncCondition<TInstance> condition, Behavior<TInstance> thenBehavior, Behavior<TInstance> elseBehavior)
         {
             _condition = condition;
-            _behavior = behavior;
+            _thenBehavior = thenBehavior;
+            _elseBehavior = elseBehavior;
         }
 
         void IProbeSite.Probe(ProbeContext context)
         {
             var scope = context.CreateScope("condition");
 
-            _behavior.Probe(scope);
+            _thenBehavior.Probe(scope);
+            _elseBehavior.Probe(scope);
         }
 
         void Visitable.Accept(StateMachineVisitor visitor)
         {
-            visitor.Visit(this, x => _behavior.Accept(visitor));
+            visitor.Visit(this, x => _thenBehavior.Accept(visitor));
+            visitor.Visit(this, x => _elseBehavior.Accept(visitor));
         }
 
         async Task Activity<TInstance>.Execute(BehaviorContext<TInstance> context, Behavior<TInstance> next)
         {
-            if (_condition(context))
-                await _behavior.Execute(context).ConfigureAwait(false);
+            if (await _condition(context).ConfigureAwait(false))
+                await _thenBehavior.Execute(context).ConfigureAwait(false);
+            else
+                await _elseBehavior.Execute(context).ConfigureAwait(false);
 
             await next.Execute(context).ConfigureAwait(false);
         }
 
         async Task Activity<TInstance>.Execute<T>(BehaviorContext<TInstance, T> context, Behavior<TInstance, T> next)
         {
-            if (_condition(context))
-                await _behavior.Execute(context).ConfigureAwait(false);
+            if (await _condition(context).ConfigureAwait(false))
+                await _thenBehavior.Execute(context).ConfigureAwait(false);
+            else
+                await _elseBehavior.Execute(context).ConfigureAwait(false);
 
             await next.Execute(context).ConfigureAwait(false);
         }
@@ -74,25 +82,29 @@ namespace Automatonymous.Activities
         Activity<TInstance>
         where TInstance : class
     {
-        readonly Behavior<TInstance> _behavior;
-        readonly StateMachineCondition<TInstance, TData> _condition;
+        readonly Behavior<TInstance> _thenBehavior;
+        readonly Behavior<TInstance> _elseBehavior;
+        readonly StateMachineAsyncCondition<TInstance, TData> _condition;
 
-        public ConditionActivity(StateMachineCondition<TInstance, TData> condition, Behavior<TInstance> behavior)
+        public ConditionActivity(StateMachineAsyncCondition<TInstance, TData> condition, Behavior<TInstance> thenBehavior, Behavior<TInstance> elseBehavior)
         {
             _condition = condition;
-            _behavior = behavior;
+            _thenBehavior = thenBehavior;
+            _elseBehavior = elseBehavior;
         }
 
         void IProbeSite.Probe(ProbeContext context)
         {
             var scope = context.CreateScope("condition");
 
-            _behavior.Probe(scope);
+            _thenBehavior.Probe(scope);
+            _elseBehavior.Probe(scope);
         }
 
         void Visitable.Accept(StateMachineVisitor visitor)
         {
-            visitor.Visit(this, x => _behavior.Accept(visitor));
+            visitor.Visit(this, x => _thenBehavior.Accept(visitor));
+            visitor.Visit(this, x => _elseBehavior.Accept(visitor));
         }
 
         Task Activity<TInstance>.Execute(BehaviorContext<TInstance> context, Behavior<TInstance> next)
@@ -105,8 +117,10 @@ namespace Automatonymous.Activities
             var behaviorContext = context as BehaviorContext<TInstance, TData>;
             if (behaviorContext != null)
             {
-                if (_condition(behaviorContext))
-                    await _behavior.Execute(behaviorContext).ConfigureAwait(false);
+                if (await _condition(behaviorContext).ConfigureAwait(false))
+                    await _thenBehavior.Execute(behaviorContext).ConfigureAwait(false);
+                else
+                    await _elseBehavior.Execute(behaviorContext).ConfigureAwait(false);
             }
 
             await next.Execute(context).ConfigureAwait(false);
